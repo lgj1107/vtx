@@ -1,0 +1,15 @@
+reloc1 = 0xfffffff800000000;
+reloc2 = 32*1024*1024;
+reloc = 0x1e000000;
+ENTRY(start)
+OUTPUT_FORMAT(elf64-x86-64)
+OUTPUT_ARCH(i386:x86-64)
+SECTIONS
+{
+
+	. = reloc1 + reloc2;
+	.text : { *(.text)}
+	.data : { *(.data)}
+	.bss : { *(.bss)}
+}
+	

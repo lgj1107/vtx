@@ -1,0 +1,201 @@
+.code16
+	.text
+	.global start16, begin
+	.intel_syntax noprefix
+begin:
+	.long	0x12345678		#SIG 0
+	.word	offset start16		#4
+	.word	0x0			#6
+	.word	0x0			#8
+	.word	0x0			#10
+start16:
+	pushf
+	pop	ax
+	mov	ax,0x8000
+	mov	fs,ax
+	
+	xor	si,si
+	mov	ax,fs:[si]
+	mov	dl,al
+	shr	ax,8
+	out	0x21,al
+	mov	al,dl
+	out	0xa1,al
+bsd.0:
+	pushf
+	mov	si,0x7c00
+	mov	ax,[si]
+	mov	dx,0xb800
+	mov	es,dx
+	pop	ax
+	mov	di,160*10 +64
+	call	hex16
+
+
+	cli
+	lgdt	gdtr
+	mov	eax,cr0
+	or	al,1
+	mov	cr0,eax
+	ljmp	0x8,offset start32
+.code32
+start32:
+	mov	ax,0x10
+	mov	ds,ax
+	mov	es,ax
+	mov	ss,ax
+	mov	fs,ax
+	mov	gs,ax
+	mov	esp,0x200000
+	
+	xor	eax,eax
+	cpuid
+
+	mov	ebx,16*1024*1024
+	mov	ebx,0x100000
+	mov	[ebx-8],eax
+	mov	eax,[ebx-8]
+	call	hex_32
+	
+.set	page_base,0x100000
+.set	page_pd,  0x101000	
+
+	mov	edi,page_base
+	mov	eax,cr4
+	mov	eax,cr0
+	mov	cr0,eax
+	sgdt	temp0
+	mov	eax,[temp0]
+	mov	edi,0xb8000+160*3-128
+	call	hex_32
+
+	jmp	$
+hex_32:
+	push	eax
+	shr	eax,16
+	call	hex_16
+	pop	eax
+hex_16:
+	push	eax
+	shr	ax,8
+	call	hex_8
+	pop	eax
+hex_8:
+	push	eax
+	shr	al,4
+	call	hex8_1
+	pop	eax
+hex8_1:
+	and	al,0xf
+	add	al,0x30
+	cmp	al,0x39
+	jbe	hex8_2
+	add	al,0x7
+hex8_2:
+	mov	ah,2
+	stosw		
+	ret
+	jmp	$
+bsd:
+.code16
+	mov	ah,2
+	mov	al,1
+	mov	cl,1
+	mov	ch,0
+	mov	bx,0x7c00
+	xor	dx,dx
+	mov	es,dx
+	mov	dl,0x1
+	int	0x13
+
+.if 0	
+	xor	ax,ax
+	mov	es,ax
+	mov	ds,ax
+	lea	si,disk_pack
+	mov	ah,0x42
+	mov	dx,0x80
+	int	0x13
+.endif
+
+	ljmp	0:0x7c00
+	.intel_syntax noprefix
+	.global	hex16
+hex16:
+	push	ax
+	shr	ax,8
+	call	hex8
+	pop	ax
+hex8:
+	push	ax
+	shr	al,4
+	call	hex8.1
+	pop	ax
+hex8.1:
+	and	al,0xf
+	add	al,0x30
+	cmp	al,0x39
+	jbe	hex8.2
+	add	al,0x7
+hex8.2:
+	mov	ah,6
+	stosw		
+	ret
+	.global	putc.1
+putc.1:
+	mov	bx,7
+	mov	ah,0xe
+	int	0x10
+putc:
+	lodsb
+	test	al,al
+	jnz	putc.1
+	ret
+gdt16:
+	.quad	0x0
+	.quad	0x00cf9a000000ffff
+	.quad	0x00cf92000000ffff
+#tss_sel
+	.word	0x0			#limit	15-0
+	.word	0			#base address 15 - 0 
+	.byte	0x0			#base address 23 -16
+	.byte	0x0
+	.byte	0x0			#G_0_0_AVL_LIMIT
+	.byte	0x0			#BASE 31_24
+	.quad	0x00009b000000ffff	#0x20
+	.quad	0x000093000000ffff	#0x28
+gdtr:
+	.word	4*8-1
+	.long	offset gdt16
+temp0:
+	.word	0x0
+	.long	0x0
+#
+#BIOS int 0x13 ah=0x42 disk address packet structure
+#
+	.p2align 4
+disk_pack:
+	.byte	0x10		#struct size (always 16 bytes ??)
+	.byte	0		#reserved  0
+	.word	1		#sector count read ,on some BIOS you can specify only
+				#up to 127 sector (0x7f).BIOS int 0x13 places here number of 
+				#sectors actually read
+	.word	0x7c00		#offset
+	.word	0x0000		#segment
+	.long	0x0		#sector number to read 
+	.long	0x0		#use only in LBA48
+
+	.org	1024
+tss_end:
+#	V86 STACK
+#------------------------
+#|	old GS		|
+#|	old FS		|
+#|	old ES		|
+#|	old ES		|
+#|	old SS		|
+#|	old ESP		|
+#|	old EFLAGS	|
+#|	old CS		|
+#|	old EIP		|
+#|----------------------|<----new esp

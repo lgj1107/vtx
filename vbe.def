@@ -1,0 +1,41 @@
+## Mandatory information for all VBE revisions
+     ModeAttributes	 dw ?      # mode attributes
+     WinAAttributes      db ?      # window A attributes
+     WinBAttributes      db ?      # window B attributes
+     WinGranularity      dw ?      # window granularity
+     WinSize             dw ?      # window size
+     WinASegment         dw ?      # window A start segment
+     WinBSegment         dw ?      # window B start segment
+     WinFuncPtr          dd ?      # pointer to window function
+     BytesPerScanLine    dw ?      # bytes per scan line
+
+     # Mandatory information for VBE 1.2 and above
+     XResolution         dw ?      # horizontal resolution in pixels or chars
+     YResolution         dw ?      # vertical resolution in pixels or chars
+     XCharSize           db ?      # character cell width in pixels
+     YCharSize           db ?      # character cell height in pixels
+     NumberOfPlanes      db ?      # number of memory planes
+     BitsPerPixel        db ?      # bits per pixel
+     NumberOfBanks       db ?      # number of banks
+     MemoryModel         db ?      # memory model type
+     BankSize            db ?      # bank size in KB
+     NumberOfImagePages  db ?      # number of images
+     Reserved            db ?      # reserved for page function
+
+     # Direct Color fields (required for direct/6 and YUV/7 memory models)
+     RedMaskSize         db ?      # size of direct color red mask in bits
+     RedFieldPosition    db ?      # bit position of lsb of red mask
+     GreenMaskSize       db ?      # size of direct color green mask in bits
+     GreenFieldPosition  db ?      # bit position of lsb of green mask
+     BlueMaskSize        db ?      # size of direct color blue mask in bits
+     BlueFieldPosition   db ?      # bit position of lsb of blue mask
+     RsvdMaskSize        db ?      # size of direct color reserved mask in bits
+     RsvdFieldPosition   db ?      # bit position of lsb of reserved mask
+     DirectColorModeInfo db ?      # direct color mode attributes
+
+     # Mandatory information for VBE 2.0 and above
+     PhysBasePtr         dd ?      # physical address for flat frame buffer	0x28
+     OffScreenMemOffset  dd ?      # pointer to start of off screen memory
+     OffScreenMemSize    dw ?      # amount of off screen memory in 1k units
+     Reserved            db 206 dup (?)  # remainder of ModeInfoBlock
+     ModeInfoBlock ends

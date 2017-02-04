@@ -1,0 +1,129 @@
+	.set	SEL_SCODE,0x18
+	.set	SEL_SDATA,0x20
+	.set	SEL_UDATA,0x28|3
+	.set	SEL_UCODE,0x30|3
+	.set	SEL_TSS,0x38
+
+	.set	tss_rsvd0,0
+	.set	tss_rsp0,4
+	.set	tss_rsp1,12
+	.set	tss_rsp2,20
+	.set	tss_rsvd1,28
+	.set	tss_rsvd2,32
+	.set	tss_ist1,36
+	.set	tss_ist2,44
+	.set	tss_ist3,52
+	.set	tss_ist4,60
+	.set	tss_ist5,68
+	.set	tss_ist6,76
+	.set	tss_ist7,84
+	.set	tss_rsvd3,92
+	.set	tss_rsvd4,96
+	.set	tss_rsvd5,100
+	.set	tss_iomap_base,102
+
+#
+#PCB
+#
+	.set	pcb_r15,0
+	.set	pcb_r14,8
+	.set	pcb_r13,16
+	.set	pcb_r12,24
+	.set	pcb_r11,32
+	.set	pcb_r10,40
+	.set	pcb_rsp0,48
+	.set	pcb_rsp3,56
+	.set	pcb_rbp,64
+	.set	pcb_rsp,72
+	.set	pcb_rbx,80
+	.set	pcb_rip,88
+	.set	pcb_cr0,96
+	.set	pcb_cr2,104
+	.set	pcb_cr3,112
+	.set	pcb_cr4,120
+	.set	pcb_rsv,128
+	.set	pcb_tr,160
+	.set	pcb_flags,162		#1 byte
+	.set	pcb_init_fpu_cw,163
+	.set	pcb_tss,165
+	.set	pcb_savefpu,269
+.if 0
+#
+#CPU data
+#
+#	.set	idt_base,0x3e00000
+	.set	idt_size,256*16
+#	.set	cpu_data_base,idt_base+idt_size
+	.set	cpu_rsp3,0x1000
+	.set	cpu_rsp0,0x2000
+	.set	cpu_gdtr_limit,cpu_rsp0
+	.set	cpu_gdtr_base,cpu_gdtr_limit+2
+	.set	cpu_gdt_base,cpu_gdtr_limit+10
+#	.set	cpu_tss_base,8*11+10
+	.set	cpu_tss_base,cpu_gdt_base+8*11
+
+.set	cpu_pcb_size,0x2000
+.set	cpu_data_size,0x5000
+	.set	cpu_pcb_base,cpu_tss_base+tss_size
+
+.endif
+
+.if 1	
+	.macro	set_gate vector,offset
+	movabs	rax,offset \offset 
+	mov	rdi,kernel_idt + \vector*16
+	call	set_gate1
+	.endm
+	.if 0
+	mov	[rdi],ax
+	shr	eax,16
+	mov	[rdi+6],ax
+	mov	[rdi+2],dh
+	mov	[rdi+5],dl
+	.endm
+	.endif
+.macro print src,buff
+	movabs	rsi,offset \src
+	mov	rax,[rsi]
+	mov	edi,0xb8000+160*\buff
+	call	hex64
+.endm
+
+.macro print_hex buff
+	mov	edi,0xb8000+160*\buff
+	call	hex64
+.endm
+
+.macro push_fram
+	push	rbp
+	push	rdi
+	push	rsi
+	push	rbx
+	push	rcx
+	push	rdx
+	push	r8
+	push	r9
+	push	r10
+	push	r11
+	push	r12
+	push	r13
+	push	r14
+	push	r15
+	.endm
+.macro pop_fram
+	pop	r15
+	pop	r14
+	pop	r13
+	pop	r12
+	pop	r11
+	pop	r10
+	pop	r9
+	pop	r8
+	pop	rdx
+	pop	rcx
+	pop	rbx
+	pop	rsi
+	pop	rdi
+	pop	rbp
+	.endm	
+.endif

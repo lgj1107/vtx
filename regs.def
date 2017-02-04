@@ -1,0 +1,194 @@
+
+#
+# Bits in PPro special registers
+#
+	.set	CR4_VME	,0x00000001	# Virtual 8086 mode extensions#/
+	.set	CR4_PVI	,0x00000002	# Protected-mode virtual interrupts#/
+	.set	CR4_TSD	,0x00000004	# Time stamp disable
+	.set	CR4_DE	,0x00000008	# Debugging extensions
+	.set	CR4_PSE	,0x00000010	# Page size extensions#/
+	.set	CR4_PAE	,0x00000020	# Physical address extension#/
+	.set	CR4_MCE	,0x00000040	# Machine check enable#/
+	.set	CR4_PGE	,0x00000080	# Page global enable
+	.set	CR4_PCE ,0x00000100	#enable RDPMC instruction for all cpls
+	.set	CR4_PCE	,0x00000100	# Performance monitoring counter enable
+	.set	CR4_FXSR,0x00000200	# Fast FPU save/restore used by OS
+	.set	CR4_XMM	,0x00000400	# enable SIMD/MMX2 to use except 16
+	.set	CR4_VMXE,0x00002000	#enable VMX operation
+	.set	CR4_SMXE,0x00004000	#enable SMX operation
+	.set	CR4_FSGS,0x00010000	#enable fsbase an gsbase instruction
+	.set	CR4_XSAVE,0x00040000	#enbale xsave an xrestore
+#
+# Bits in AMD64 special registers.  EFER is 64 bits wide.
+#/
+	.set	MSR_EFER ,0xc0000080
+	.set	EFER_SCE ,0x000000001	# System Call Extensions (R/W)#/
+	.set	EFER_LME ,0x000000100	# Long mode enable (R/W)#/
+	.set	EFER_LMA ,0x000000400	# Long mode active (R)#/
+	.set	EFER_NXE ,0x000000800	# PTE No-Execute bit enable (R/W)#/
+	.set	EFER_SVM ,0x000001000	# Secure Virtual Machine Enable
+#
+# Model-specific registers for the i386 family
+#/
+	.set	MSR_P5_MC_ADDR,		0x000
+	.set	MSR_P5_MC_TYPE,		0x001
+	.set	MSR_TSC,		0x010
+	.set	MSR_P5_CESR,		0x011
+	.set	MSR_P5_CTR0,		0x012
+	.set	MSR_P5_CTR1,		0x013
+	.set	MSR_IA32_PLATFORM_ID,	0x017
+	.set	MSR_APICBASE,		0x01b
+	.set	MSR_EBL_CR_POWERON,	0x02a
+	.set	MSR_TEST_CTL	,	0x033
+	//.set	MSR_FEATURE_CTL	,	0x03a
+	.set	MSR_BIOS_UPDT_TRIG,	0x079
+.set	MSR_BBL_CR_D0	,	0x088
+.set	MSR_BBL_CR_D1	,	0x089
+.set	MSR_BBL_CR_D2	,	0x08a
+.set	MSR_BIOS_SIGN	,	0x08b
+.set	MSR_PERFCTR0	,	0x0c1
+.set	MSR_PERFCTR1	,	0x0c2
+.set	MSR_IA32_EXT_CONFIG,	0x0ee	# Undocumented. Core Solo/Duo only#/
+	.set	MSR_IA32_MTRRCAP	,	0xfe
+.set	MSR_BBL_CR_ADDR	,	0x116
+.set	MSR_BBL_CR_DECC	,	0x118
+.set	MSR_BBL_CR_CTL	,	0x119
+.set	MSR_BBL_CR_TRIG	,	0x11a
+.set	MSR_BBL_CR_BUSY	,	0x11b
+.set	MSR_BBL_CR_CTL3	,	0x11e
+.set	MSR_SYSENTER_CS_MSR,	0x174
+.set	MSR_SYSENTER_ESP_MSR,	0x175
+.set	MSR_SYSENTER_EIP_MSR,	0x176
+.set	MSR_MCG_CAP	,	0x179
+.set	MSR_MCG_STATUS	,	0x17a
+.set	MSR_MCG_CTL	,	0x17b
+.set	MSR_EVNTSEL0	,	0x186
+.set	MSR_EVNTSEL1	,	0x187
+.set	MSR_THERM_CONTROL,	0x19a
+.set	MSR_THERM_INTERRUPT,	0x19b
+.set	MSR_THERM_STATUS,	0x19c
+.set	MSR_IA32_MISC_ENABLE,	0x1a0
+.set	MSR_IA32_TEMPERATURE_TARGET,	0x1a2
+.set	MSR_DEBUGCTLMSR	,	0x1d9
+.set	MSR_LASTBRANCHFROMIP,	0x1db
+.set	MSR_LASTBRANCHTOIP,	0x1dc
+.set	MSR_LASTINTFROMIP,	0x1dd
+	.set	MSR_LASTINTTOIP	,	0x1de
+	.set	MSR_ROB_CR_BKUPTMPDR6,	0x1e0
+
+	.set	IA32__MTRRVARBASE	,0x200		#PHYSBASE0
+	.set	IA32_MTRR_PHYBASE0	,0x200
+	.set	IA32_MTRR_PHYSMASK0	,0x201
+	.set	IA32_MTRR_PHYBASE1	,0x202
+	.set	IA32_MTRR_PHYSMASK1	,0x203
+
+	.set	IA32_MTRR_FIX64K_00000	,0x250
+	.set	IA32_MTRR_FIX16K_80000	,0x258
+	.set	IA32_MTRR_FIX16K_A0000	,0x259
+	.set	IA32_MTRR_FIX4K_C0000	,0x268
+
+	.set	MSR_PAT			,0x277
+.set	MSR_MC0_CTL2	,	0x280
+	.set	MSR_IA32_MTRR_DEF_TYPE	,	0x2ff
+.set	MSR_MC0_CTL	,	0x400
+.set	MSR_MC0_STATUS	,	0x401
+.set	MSR_MC0_ADDR	,	0x402
+.set	MSR_MC0_MISC	,	0x403
+.set	MSR_MC1_CTL	,	0x404
+.set	MSR_MC1_STATUS	,	0x405
+.set	MSR_MC1_ADDR	,	0x406
+.set	MSR_MC1_MISC	,	0x407
+.set	MSR_MC2_CTL	,	0x408
+.set	MSR_MC2_STATUS	,	0x409
+.set	MSR_MC2_ADDR	,	0x40a
+.set	MSR_MC2_MISC	,	0x40b
+.set	MSR_MC3_CTL	,	0x40c
+.set	MSR_MC3_STATUS	,	0x40d
+.set	MSR_MC3_ADDR	,	0x40e
+.set	MSR_MC3_MISC	,	0x40f
+.set	MSR_MC4_CTL	,	0x410
+.set	MSR_MC4_STATUS	,	0x411
+.set	MSR_MC4_ADDR	,	0x412
+.set	MSR_MC4_MISC	,	0x413
+
+	.set	IA32_STAR,0xc0000081		#system call target address
+	.set	IA32_LSTAR,0xc0000082		#IA32E mode system call target address
+	.set	IA32_FMASK,0xc0000084			#system call flag mask
+	.set	IA32_FSBASE,0xc0000100
+	.set	IA32_GSBASE,0xc0000101
+	.set	IA32_KERNEL_GSBASE,0xc0000102	
+
+#
+#VMX MSR
+#
+	.set	IA32_FEATURE_CTL	,0x3a		#
+	.set	IA32_VMX_BASIC     	,0x480
+	.set	IA32_VMX_PINBASED_CTLS	,0x481
+	.set	IA32_VMX_PROCBASED_CTLS	,0x482
+	.set	IA32_VMX_EXIT_CTLS	,0x483
+	.set	IA32_VMX_ENTRY_CTLS	,0x484
+	.set	IA32_VMX_MISC		,0x485
+	.set	IA32_VMX_CR0_FIXED0	,0x486
+	.set	IA32_VMX_CR0_FIXED1	,0x487
+	.set	IA32_VMX_CR4_FIXED0	,0x488
+	.set	IA32_VMX_CR4_FIXED1	,0x489
+	.set	IA32_VMX_PROCBASED_CTLS2,0x48b
+	.set	IA32_VMX_EPT_VPID_CAP	,0x48c
+	.set	IA32_VMX_TRUE_PINBASED_CTLS	,0x48d
+	.set	IA32_VMX_TRUE_PROCBASED_CTLS	,0x48e
+	.set	IA32_VMX_TRUE_EXIT_CTLS		,0x48f
+	.set	IA32_VMX_TRUE_ENTRY_CTLS,0x490
+#
+#Pin-Based VM-Execution Controls (MSR 481)
+#
+	.set	external_interrupt_exiting	,0x1
+	.set	NMI_exiting			,0x8
+	.set	virtual_NMIs			,0x20	
+#
+#Primary Processor-Based 0x482
+#
+	.set	interrupt_windows_exiting	,0x4
+	.set	use_tsc_offsetting		,0x8
+	.set	hlt_exiting			,0x80
+	.set	invlpg_exiting			,0x200
+	.set	cr3_load_exiting		,0x8000
+	.set	cr3_store_exiting		,0x10000
+	.set	unconditional_io_exit		,0x1000000
+	.set	use_io_bitmap			,0x2000000
+	.set	use_msr_bitmaps			,0x10000000
+	.set	pause_exiting			,0x40000000
+	.set	activate_secondary_control	,0x80000000
+#
+#Secondary processor-based 	0x48b
+#
+	.set	virtualize_apic_accesses	,0x1
+	.set	enable_ept			,0x2
+	.set	desripttor_table_exiting	,0x4
+	.set	enable_virtulize_x2apic_mode	,0x10
+	.set	enable_vpid			,0x20
+	.set	unrestricted_guest		,0x80
+	.set	apic_register_virtualization	,0x100
+	.set	virtual_interrupt_delivery	,0x200
+#
+#VMX EXIT CTLS	0x483
+#
+	.set	host_addr_space_size		,0x200
+	.set	ack_interrupt_on_exit		,0x8000
+	.set	save_ia32_efer			,0x100000 #bit 20
+	.set	exit_load_ia32_efer			,0x200000 #bit 21
+#
+#VMX ENTRY CTLS
+#IA32_VMX_ENTRY_CTLS	0x484
+#
+	.set	entry_load_debug_controls	,0x4
+	.set	ia32e_mode_guest		,0x200
+	.set	entry_to_smm			,0x400
+	.set	deactivate_dual_monitor		,0x800
+	.set	entry_load_ia32_efer			,0x8000
+#
+# Constants related to MSR's.
+#/
+.set	APICBASE_RESERVED,	0x000006ff
+.set	APICBASE_BSP	,	0x00000100
+.set	APICBASE_ENABLED,	0x00000800
+.set	APICBASE_ADDRESS,	0xfffff000

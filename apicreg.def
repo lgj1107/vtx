@@ -1,0 +1,390 @@
+#
+# Local && I/O APIC definitions.
+#
+
+#
+# Pentium P54C+ Built-in APIC
+# (Advanced programmable Interrupt Controller)
+# 
+# Base Address of Built-in APIC in memory location
+# is 0xfee00000.
+# 
+# Map of APIC Registers:
+# 
+# Offset (hex)    Description                     Read/Write state
+# 000             Reserved
+# 010             Reserved
+# 020 ID          Local APIC ID                   R/W
+# 030 VER         Local APIC Version              R
+# 040             Reserved
+# 050             Reserved
+# 060             Reserved
+# 070             Reserved
+# 080             Task Priority Register          R/W
+# 090             Arbitration Priority Register   R
+# 0A0             Processor Priority Register     R
+# 0B0             EOI Register                    W
+# 0C0 RRR         Remote read                     R
+# 0D0             Logical Destination             R/W
+# 0E0             Destination Format Register     0..27 R;  28..31 R/W
+# 0F0 SVR         Spurious Interrupt Vector Reg.  0..3  R;  4..9   R/W
+# 100             ISR  000-031                    R
+# 110             ISR  032-063                    R
+# 120             ISR  064-095                    R
+# 130             ISR  095-128                    R
+# 140             ISR  128-159                    R
+# 150             ISR  160-191                    R
+# 160             ISR  192-223                    R
+# 170             ISR  224-255                    R
+# 180             TMR  000-031                    R
+# 190             TMR  032-063                    R
+# 1A0             TMR  064-095                    R
+# 1B0             TMR  095-128                    R
+# 1C0             TMR  128-159                    R
+# 1D0             TMR  160-191                    R
+# 1E0             TMR  192-223                    R
+# 1F0             TMR  224-255                    R
+# 200             IRR  000-031                    R
+# 210             IRR  032-063                    R
+# 220             IRR  064-095                    R
+# 230             IRR  095-128                    R
+# 240             IRR  128-159                    R
+# 250             IRR  160-191                    R
+# 260             IRR  192-223                    R
+# 270             IRR  224-255                    R
+# 280             Error Status Register           R
+# 290             Reserved
+# 2A0             Reserved
+# 2B0             Reserved
+# 2C0             Reserved
+# 2D0             Reserved
+# 2E0             Reserved
+# 2F0             Local Vector Table (CMCI)       R/W
+# 300 ICR_LOW     Interrupt Command Reg. (0-31)   R/W
+# 310 ICR_HI      Interrupt Command Reg. (32-63)  R/W
+# 320             Local Vector Table (Timer)      R/W
+# 330             Local Vector Table (Thermal)    R/W (PIV+)
+# 340             Local Vector Table (Performance) R/W (P6+)
+# 350 LVT1        Local Vector Table (LINT0)      R/W
+# 360 LVT2        Local Vector Table (LINT1)      R/W
+# 370 LVT3        Local Vector Table (ERROR)      R/W
+# 380             Initial Count Reg. for Timer    R/W
+# 390             Current Count of Timer          R
+# 3A0             Reserved
+# 3B0             Reserved
+# 3C0             Reserved
+# 3D0             Reserved
+# 3E0             Timer Divide Configuration Reg. R/W
+# 3F0             Reserved
+#
+
+# default physical locations of LOCAL (CPU) APICs#/
+	.set	APIC_BASE	,0xfee00000
+	.set	APIC_ID		,APIC_BASE+0x20
+	.set	APIC_EOI	,APIC_BASE+0x0b0		# End Int. W 
+#
+#
+#
+	.set	APIC_LVT_CMCI	,APIC_BASE + 0x2F0
+	.set	APIC_LVT_TMR	,APIC_BASE + 0x330		#thermal monitor register
+	.set	APIC_LVT_PCR	,APIC_BASE + 0x340		#performance counter register
+
+# constants relating to APIC ID registers#/
+	.set	APIC_ID_MASK 	   	,0xff000000
+	.set	APIC_ID_SHIFT   	,24
+	.set	APIC_ID_CLUSTER         ,0xf0
+	.set	APIC_ID_CLUSTER_ID      ,0x0f
+	.set	APIC_MAX_CLUSTER        ,0xe
+	.set	APIC_MAX_INTRACLUSTER_ID,3
+	.set	APIC_ID_CLUSTER_SHIFT   ,4
+
+	.set	APIC_VER,APIC_BASE+0x30
+#
+# fields in VER#
+#
+	.set APIC_VER_VERSION        ,0x000000ff
+	.set APIC_VER_MAXLVT         ,0x00ff0000
+	.set MAXLVTSHIFT             ,16
+	.set APIC_VER_EOI_SUPPRESSION,0x01000000
+
+# fields in LDR#/
+	.set APIC_LDR_RESERVED      ,0x00ffffff
+
+# fields in DFR#/
+	.set APIC_DFR_RESERVED      ,0x0fffffff
+	.set APIC_DFR_MODEL_MASK    ,0xf0000000
+	.set APIC_DFR_MODEL_FLAT    ,0xf0000000
+	.set APIC_DFR_MODEL_CLUSTER ,0x00000000
+#
+# fields in SVR#/
+#
+	.set	APIC_SVR,APIC_BASE + 0xf0
+	.set	APIC_SVR_VECTOR     ,0x000000ff
+	.set	APIC_SVR_VEC_PROG   ,0x000000f0
+	.set	APIC_SVR_VEC_FIX    ,0x0000000f
+	.set	APIC_SVR_ENABLE     ,0x00000100
+	.set	APIC_SVR_SWDIS      ,0x00000000
+	.set	APIC_SVR_SWEN       ,0x00000100
+	.set	APIC_SVR_FOCUS      ,0x00000200
+	.set APIC_SVR_FEN           ,0x00000000
+	.set APIC_SVR_FDIS          ,0x00000200
+	.set APIC_SVR_EOI_SUPPRESSION, 0x00001000
+
+	.set	APIC_TPR	,APIC_BASE+0x080		#Task Priority reg RW 
+#
+# fields in TPR
+#
+	.set APIC_TPR_PRIO         ,0x000000ff
+	.set APIC_TPR_INT          ,0x000000f0
+	.set APIC_TPR_SUB          ,0x0000000f
+
+# fields in ESR#/
+	.set	APIC_ESR_SEND_CS_ERROR,          0x00000001
+	.set 	APIC_ESR_RECEIVE_CS_ERROR,       0x00000002
+	.set	APIC_ESR_SEND_ACCEPT     ,       0x00000004
+.set APIC_ESR_RECEIVE_ACCEPT  ,       0x00000008
+.set APIC_ESR_SEND_ILLEGAL_VECTOR ,   0x00000020
+.set APIC_ESR_RECEIVE_ILLEGAL_VECTOR, 0x00000040
+.set APIC_ESR_ILLEGAL_REGISTER      , 0x00000080
+
+#
+# fields in ICR_LOW#/
+#
+	.set	APIC_ICR_LO,APIC_BASE+0x300
+	.set	APIC_ICR_HI,APIC_BASE+0x310
+
+	.set	APIC_VECTOR_MASK      ,0x000000ff
+	.set	APIC_DELMODE_MASK      ,0x00000700
+	.set	APIC_DELMODE_FIXED     ,0x00000000
+	.set	APIC_DELMODE_LOWPRIO   ,0x00000100
+	.set	APIC_DELMODE_SMI       ,0x00000200
+	.set	APIC_DELMODE_RR        ,0x00000300
+	.set	APIC_DELMODE_NMI       ,0x00000400
+.set APIC_DELMODE_INIT      ,0x00000500
+.set APIC_DELMODE_STARTUP   ,0x00000600
+.set APIC_DELMODE_RESV      ,0x00000700
+
+	.set	APIC_DESTMODE_MASK     ,0x00000800
+	.set	APIC_DESTMODE_PHY      ,0x00000000		
+	.set	APIC_DESTMODE_LOG      ,0x00000800
+
+.set APIC_DELSTAT_MASK      , 0x00001000
+.set APIC_DELSTAT_IDLE      ,0x00000000
+.set APIC_DELSTAT_PEND      ,0x00001000
+
+.set APIC_RESV1_MASK        , 0x00002000
+
+	.set	APIC_LEVEL_MASK        , 0x00004000
+	.set	APIC_LEVEL_DEASSERT    ,0x00000000
+	.set	APIC_LEVEL_ASSERT      ,0x00004000
+.set APIC_TRIGMOD_MASK      , 0x00008000
+.set APIC_TRIGMOD_EDGE      ,0x00000000
+.set APIC_TRIGMOD_LEVEL     ,0x00008000
+
+.set APIC_RRSTAT_MASK       , 0x00030000
+.set APIC_RRSTAT_INVALID    ,0x00000000
+.set APIC_RRSTAT_INPROG     ,0x00010000
+.set APIC_RRSTAT_VALID      ,0x00020000
+.set APIC_RRSTAT_RESV       ,0x00030000
+
+	.set	APIC_DEST_MASK          ,0x000c0000
+	.set	APIC_DEST_DESTFLD      ,0x00000000
+	.set	APIC_DEST_SELF         ,0x00040000
+	.set	APIC_DEST_ALLISELF     ,0x00080000
+	.set	APIC_DEST_ALLESELF     ,0x000c0000
+
+	.set	APIC_RESV2_MASK,0xfff00000
+
+	.set	APIC_LVT_LINT0,APIC_BASE+0x350			# Loc.vec (LINT0) RW
+	.set	APIC_LVT_LINT1,APIC_BASE+0x360			# Loc.vec (LINT1) RW
+
+#
+# fields in LVT1/2#/
+#
+	.set	APIC_LVT_VECTOR       , 0x000000ff
+	.set	APIC_LVT_DM           , 0x00000700
+	.set	APIC_LVT_DM_FIXED     , 0x00000000
+	.set	APIC_LVT_DM_SMI       , 0x00000200
+	.set	APIC_LVT_DM_NMI       ,0x00000400
+	.set	APIC_LVT_DM_INIT      , 0x00000500
+	.set	APIC_LVT_DM_EXTINT    ,0x00000700
+	.set	APIC_LVT_DS           , 0x00001000
+	.set	APIC_LVT_IIPP         , 0x00002000
+	.set	APIC_LVT_IIPP_INTALO  , 0x00002000
+	.set	APIC_LVT_IIPP_INTAHI  , 0x00000000
+	.set	APIC_LVT_RIRR         , 0x00004000
+	.set	APIC_LVT_M            , 0x00008000
+	.set	APIC_LVT_TM           , 0x00010000
+
+
+	.set	APIC_LVT_TIMER,APIC_BASE+0x320				#apic timer RW
+	.set	APIC_INITIAL_COUNT_TIMER,APIC_BASE+0x380		#Initial count RW 
+	.set	APIC_CCR_TIMER,APIC_BASE+0x390				#Current count RO
+	.set	APIC_DIVISOR_CONFIG_TIMER,APIC_BASE+0x3e0		#Divisor config register
+
+#
+# fields in LVT Timer#/
+#
+	.set	APIC_LVTT_DS          , 0x00001000
+	.set	APIC_LVTT_M           , 0x00010000
+	.set	APIC_LVTT_TM          , 0x00020000
+	.set	APIC_LVTT_TM_ONE_SHOT , 0x00000000
+	.set	APIC_LVTT_TM_PERIODIC , 0x00020000
+	.set	APIC_LVTT_TGM         , 0x00008000	#level sensitive = 1
+#
+# fields in TDCR
+#
+	.set	APIC_TDCR_2           ,  0x00
+	.set	APIC_TDCR_4           ,  0x01
+	.set	APIC_TDCR_8           ,  0x02
+	.set	APIC_TDCR_16          ,  0x03
+	.set	APIC_TDCR_32          ,  0x08
+	.set	APIC_TDCR_64          ,  0x09
+	.set	APIC_TDCR_128         ,  0x0a
+	.set	APIC_TDCR_1           ,  0x0b
+
+	.set	APIC_ISR	,APIC_BASE+0x100		# In-Service Status 
+	.set	APIC_TMR	,APIC_BASE+0x180		# Trigger Mode 
+	.set	APIC_IRR	,APIC_BASE+0x200		# Interrupt Req
+	.set	APIC_ESR	,APIC_BASE+0x280		# Err status. RW
+	.set	APIC_LVT_ERR	,APIC_BASE+0x370		# Loc.vec (ERROR) RW
+.if 0
+	.set	APIC_IRR0	,APIC_BASE+0x200		#
+	.set	APIC_IRR1	,APIC_BASE+0x210
+	.set	APIC_IRR2	,APIC_BASE+0x220
+	.set	APIC_IRR3	,APIC_BASE+0x230
+	.set	APIC_IRR4	,APIC_BASE+0x240
+	.set	APIC_IRR5	,APIC_BASE+0x250
+	.set	APIC_IRR6	,APIC_BASE+0x260
+	.set	APIC_IRR7	,APIC_BASE+0x270
+
+	.set	APIC_ISR0	,APIC_BASE+0x100		(Interupt
+.endif
+#*****************************************************************************
+# I/O APIC defines
+#/
+#
+# default physical locations of an IO APIC#/
+#
+	.set	IO_APIC_BASE  ,0xfec00000
+	
+	.set	IOAPIC_REG_SEL,IO_APIC_BASE + 0x0
+# window register offset#/
+	.set	IOAPIC_WIN	,IO_APIC_BASE+0x10
+	.set	IOAPIC_EOIR	,0x40
+#
+# indexes into IO APIC
+#
+	.set	IOAPIC_ID	,0x00
+	.set	IOAPIC_VER      ,0x01
+	.set	IOAPIC_ARB      ,0x02
+	.set	IOAPIC_REDTBL	,0x10
+	.set	IOAPIC_REDTBL0	,IOAPIC_REDTBL
+	.set	IOAPIC_REDTBL1	,IOAPIC_REDTBL+0x02
+	.set	IOAPIC_REDTBL2	,IOAPIC_REDTBL+0x04
+	.set	IOAPIC_REDTBL3  ,IOAPIC_REDTBL+0x06
+	.set	IOAPIC_REDTBL4  ,IOAPIC_REDTBL+0x08
+	.set	IOAPIC_REDTBL5  ,IOAPIC_REDTBL+0x0a
+	.set	IOAPIC_REDTBL6  ,(IOAPIC_REDTBL+0x0c)
+	.set	IOAPIC_REDTBL7  ,(IOAPIC_REDTBL+0x0e)
+	.set	IOAPIC_REDTBL8  ,(IOAPIC_REDTBL+0x10)
+	.set	IOAPIC_REDTBL9  ,(IOAPIC_REDTBL+0x12)
+.set IOAPIC_REDTBL10       ,  (IOAPIC_REDTBL+0x14)
+.set IOAPIC_REDTBL11       ,  (IOAPIC_REDTBL+0x16)
+.set IOAPIC_REDTBL12       ,  (IOAPIC_REDTBL+0x18)
+.set IOAPIC_REDTBL13       ,  IOAPIC_REDTBL+0x1a
+.set IOAPIC_REDTBL14       ,  (IOAPIC_REDTBL+0x1c)
+.set IOAPIC_REDTBL15       ,  (IOAPIC_REDTBL+0x1e)
+.set IOAPIC_REDTBL16       ,  (IOAPIC_REDTBL+0x20)
+.set IOAPIC_REDTBL17       ,  (IOAPIC_REDTBL+0x22)
+.set IOAPIC_REDTBL18       ,  (IOAPIC_REDTBL+0x24)
+.set IOAPIC_REDTBL19       ,  (IOAPIC_REDTBL+0x26)
+.set IOAPIC_REDTBL20       ,  (IOAPIC_REDTBL+0x28)
+.set IOAPIC_REDTBL21       ,  (IOAPIC_REDTBL+0x2a)
+.set IOAPIC_REDTBL22       ,  (IOAPIC_REDTBL+0x2c)
+.set IOAPIC_REDTBL23       ,  (IOAPIC_REDTBL+0x2e)
+
+# fields in IOAPIC VERSION REGISTVER
+.set IOAPIC_VER_VERSION     ,  0x000000ff
+.set IOAPIC_VER_MAXREDIR    ,  0x00ff0000
+.set MAXREDIRSHIFT         ,  16
+
+	.set	IMCR_REG,0x70
+	.set	IMCR_PIC,0
+	.set	IMCR_APIC,1
+
+#
+# fields in the IO APICs redirection table entries 
+#
+	.set	IOAPIC_DEST     ,APIC_ID_MASK    # broadcast addr: all APICs#/
+	.set	IOAPIC_RSV	,0x00fe0000      # reserved#/
+
+	.set IOAPIC_INTMASK  ,0x00010000      # R/W: INTerrupt mask#/
+	.set IOAPIC_INTMCLR  ,0x00000000      #       clear, allow INTs#/
+	.set IOAPIC_INTMSET  ,0x00010000      #       set, inhibit INTs#/
+
+	.set IOAPIC_TRGRMOD	  ,0x00008000      # R/W: trigger mode#/
+.set IOAPIC_TRGREDG  ,0x00000000      #       edge#/
+.set IOAPIC_TRGRLVL  ,0x00008000      #       level#/
+
+	.set IOAPIC_REMOTE_IRR  , 0x00004000      # RO: remote IRR#/
+
+.set IOAPIC_INTPOL   , 0x00002000      # R/W: INT input pin polarity#/
+.set IOAPIC_INTAHI   ,0x00000000      #      active high#/
+.set IOAPIC_INTALO   ,0x00002000      #      active low#/
+
+.set IOAPIC_DELIVS   , 0x00001000      # RO: delivery status#/
+
+.set IOAPIC_DESTMOD  , 0x00000800      # R/W: destination mode#/
+.set IOAPIC_DESTPHY  ,0x00000000      #      physical#/
+.set IOAPIC_DESTLOG  ,0x00000800      #      logical#/
+
+.set IOAPIC_DELMOD   , 0x00000700      # R/W: delivery mode#/
+.set IOAPIC_DELFIXED ,0x00000000      #       fixed#/
+.set IOAPIC_DELLOPRI ,0x00000100      #       lowest priority#/
+.set IOAPIC_DELSMI   ,0x00000200      #       System Management INT#/
+.set IOAPIC_DELRSV1  ,0x00000300      #       reserved#/
+.set IOAPIC_DELNMI   ,0x00000400      #       NMI signal#/
+.set IOAPIC_DELINIT  ,0x00000500      #       INIT signal#/
+.set IOAPIC_DELRSV2  ,0x00000600      #       reserved#/
+.set IOAPIC_DELEXINT ,0x00000700      #       External INTerrupt#/
+
+.set IOAPIC_INTVEC   , 0x000000ff      # R/W: INTerrupt vector field#/
+
+#
+# Layout of local APIC interrupt vectors:
+#
+ #	0xff (255)  +-------------+
+ #                  |             | 15 (Spurious / IPIs / Local Interrupts)
+ #	0xf0 (240)  +-------------+
+ #                  |             | 14 (I/O Interrupts / Timer)
+ #	0xe0 (224)  +-------------+
+ #                  |             | 13 (I/O Interrupts)
+ #	0xd0 (208)  +-------------+
+ #                  |             | 12 (I/O Interrupts)
+ #	0xc0 (192)  +-------------+
+ #                  |             | 11 (I/O Interrupts)
+ #	0xb0 (176)  +-------------+
+ #                  |             | 10 (I/O Interrupts)
+ #	0xa0 (160)  +-------------+
+ #                  |             | 9 (I/O Interrupts)
+ #	0x90 (144)  +-------------+
+ #                  |             | 8 (I/O Interrupts / System Calls)
+ #	0x80 (128)  +-------------+
+ #                  |             | 7 (I/O Interrupts)
+ #	0x70 (112)  +-------------+
+ #                  |             | 6 (I/O Interrupts)
+ #	0x60 (96)   +-------------+
+ #                  |             | 5 (I/O Interrupts)
+ #	0x50 (80)   +-------------+
+ #                  |             | 4 (I/O Interrupts)
+ #	0x40 (64)   +-------------+
+ #                  |             | 3 (I/O Interrupts)
+ #	0x30 (48)   +-------------+
+ #                  |             | 2 (ATPIC Interrupts)
+ #	0x20 (32)   +-------------+
+ #                  |             | 1 (Exceptions, traps, faults, etc.)
+ #	0x10 (16)   +-------------+
+ #                  |             | 0 (Exceptions, traps, faults, etc.)
+ #	0x00 (0)    +-------------+
+
