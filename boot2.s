@@ -107,15 +107,6 @@ s.3:
 	wrmsr
 	call	set_gs
 	call	set_syscall
-.if 0	
-	mov	eax,((0xfffb0000&0x3fe00000)>>21)<<3
-	mov	edi,0xb8000+160*8
-	mov	eax,edi
-	mov	[0x3fe00000],eax
-	mov	rax,[0x3fe00000]
-	call	hex64
-	jmp	$
-.endif
 .if 1
 #
 #set int 0x15 vector
