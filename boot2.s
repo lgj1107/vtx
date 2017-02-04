@@ -1,12 +1,3 @@
-#
-#stack3		@stack3 top 0x5000
-#rsv		@KB
-#stack0		@stack top 0x3000
-#
-#tss
-#gdtr
-#gdt
-#
 	.include "apicreg.def"
 	.include "regs.def"
 	.include "misc.def"
