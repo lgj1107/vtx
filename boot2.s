@@ -352,10 +352,6 @@ ap_cpu:
 	.global	cpu_flag
 cpu_flag:
 	.quad	0x0
-	.global	mem_bitmap
-mem_bitmap:
-	.fill	((512*1024*1024)/(2*1024*1024))/8,1,0
-	.byte	0xa
 	.global	msg1
 msg1:	.asciz	"dadsadsdadsaads\n"
 	.global	bound_test

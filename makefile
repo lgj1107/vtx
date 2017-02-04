@@ -26,7 +26,7 @@ vmx:vmx.o
 new:$(OBJS2) 
 	cat $(OBJS2)> new
 clean:
-	rm -f boot[0-9].o boot[0-9].out boot[0-9] real.iso task[a-b].o task[a-b].out  $(OBJS) guest.o guest vmx.o vmx
+	rm -f boot[0-9].o boot[0-9].out boot[0-9] real.iso task[a-b].o task[a-b].out  $(OBJS) guest.o guest vmx.o vmx *.out
 mmc:
 	dd if=new of=/dev/sdb conv=sync
 	sync

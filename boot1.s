@@ -34,12 +34,6 @@ start32:
 	mov	ss,ax
 	mov	esp,0x1000
 
-.if 0
-	mov	edi,mp_trampoline
-	mov	esi,offset bootmp
-	mov	ecx,bootmp_end - bootmp
-	rep	movsb
-.endif
 	xor	eax,eax
 	mov	edi,kernel_phy_addr
 	mov	esi,edi
@@ -56,7 +50,6 @@ start32:
 	mov	edi,PAGE_BASE
 	mov	eax,PAGE_PDPTE|PG_P|PG_RW|PG_US
 	mov	edx,((reloc >> 39) & 0x1ff) << 3
-#	mov	edx,((reloc shr 39) and 0x1ff) shl 3
 	mov	[edi+edx],eax
 	mov	[edi],eax
 
@@ -119,9 +112,6 @@ p.4:
 	add	eax,ebx
 	loop	p.4
 
-#	mov	edi,PAGE_APIC_PDE
-#	mov	eax,0x3fe00000|PG_P|PG_RW|PG_PS
-#	mov	[edi+0xff8],eax
 
 	mov	eax,cr4
 	or	eax,CR4_FXSR|CR4_PAE|CR4_VMXE
