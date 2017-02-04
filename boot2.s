@@ -12,7 +12,6 @@ start:
 	.long	boot2_end - start
 	.quad	offset ap_entry			#offset ap_entry
 	.quad	boot2_end
-#	.ascii	"RSD PTR "
 start.1:
 	mov	rdi,kernel_virt_data_base
 	mov	ecx,(8*1024*1024)/8
@@ -279,18 +278,8 @@ set_syscall:
 	shld	rdx,rax,32
 	mov	ecx,IA32_LSTAR
 	wrmsr
-.if 0
-	call	get_lapic_id
-	mov	r15,cpu_data_base
-	mov	ebx,cpu_data_size
-	mul	ebx
-	lea	r14,[r15+rax+cpu_pcb_base]
-	pop	rbx
-	mov	[r14+pcb_rsp0],rsp
-	push	rbx
-.endif	
-
-	ret	
+	ret
+	
 	.global	hex64,hex32
 hex64:
 	push	rax

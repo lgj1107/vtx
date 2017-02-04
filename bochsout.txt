@@ -19,7 +19,7 @@
 00000000000i[      ]   SB16 support: no
 00000000000i[      ]   USB support: yes
 00000000000i[      ]   VGA extension support: vbe
-00000000000i[MEM0  ] allocated memory at 0x7f9bbcaf2010. after alignment, vector=0x7f9bbcaf3000
+00000000000i[MEM0  ] allocated memory at 0x7f4c03b89010. after alignment, vector=0x7f4c03b8a000
 00000000000i[MEM0  ] 1024.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=8192
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/gnu/share/bochs/BIOS-bochs-latest')
@@ -29,7 +29,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Sat Feb  4 10:41:25 2017 (time0=1486176085)
+00000000000i[CMOS  ] Setting initial clock to: Sat Feb  4 12:03:48 2017 (time0=1486181028)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -139,7 +139,7 @@
 00000351179i[BIOS  ] Shutdown flag 0
 00000351751i[BIOS  ] ram_size=0x40000000
 00000352241i[BIOS  ] ram_end=1024MB
-00007999400i[XGUI  ] charmap update. Font is 9 x 16
+00008013350i[XGUI  ] charmap update. Font is 9 x 16
 00009650359i[BIOS  ] Found 1 cpu(s)
 00009664118i[BIOS  ] bios_table_addr: 0x000fa0c8 end=0x000fcc00
 00009990001i[PCI   ] i440FX PMC write to PAM register 59 (TLB Flush)
@@ -197,10 +197,11 @@
 00011041193i[BXVGA ] VBE known Display Interface b0c5
 00011044117i[VBIOS ] VBE Bios $Id: vbe.c,v 1.65 2014/07/08 18:02:25 vruppert Exp $
 00011389479i[BIOS  ] ata0-0: PCHS=1015/16/63 translation=none LCHS=1015/16/63
-00014639050i[XGUI  ] charmap update. Font is 9 x 16
+00014914050i[XGUI  ] charmap update. Font is 9 x 16
 00015266330i[BIOS  ] IDE time out
 00166958406i[BIOS  ] Booting from 0000:7c00
-00176404851i[FLOPPY] partial read() on floppy image returns 33/512
+00175848305i[FLOPPY] partial read() on floppy image returns 401/512
+00176404851i[FLOPPY] read() on floppy image returns 0
 00176960403i[FLOPPY] read() on floppy image returns 0
 00177515958i[FLOPPY] read() on floppy image returns 0
 00178071513i[FLOPPY] read() on floppy image returns 0
@@ -308,26 +309,26 @@
 00234743232i[FLOPPY] read() on floppy image returns 0
 00235298787i[FLOPPY] read() on floppy image returns 0
 00235854342i[FLOPPY] read() on floppy image returns 0
-00506950000p[XGUI  ] >>PANIC<< POWER button turned off.
-00506950000i[CPU0  ] CPU is in real mode (active, vmx guest)
-00506950000i[CPU0  ] CS.mode = 16 bit
-00506950000i[CPU0  ] SS.mode = 16 bit
-00506950000i[CPU0  ] EFER   = 0x00000000
-00506950000i[CPU0  ] | EAX=00000000  EBX=0000000f  ECX=000018df  EDX=0000000a
-00506950000i[CPU0  ] | ESP=0000ff4e  EBP=0001ff5c  ESI=00000000  EDI=0000000a
-00506950000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
-00506950000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00506950000i[CPU0  ] |  CS:f000( 0005| 0|  0) 000f0000 0000ffff 0 0
-00506950000i[CPU0  ] |  DS:1000( 0006| 0|  0) 00010000 0000ffff 0 0
-00506950000i[CPU0  ] |  SS:1d4e( 0006| 0|  0) 0001d4e0 0000ffff 0 0
-00506950000i[CPU0  ] |  ES:1000( 0006| 0|  0) 00010000 0000ffff 0 0
-00506950000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
-00506950000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
-00506950000i[CPU0  ] | EIP=00004ad2 (00004ad2)
-00506950000i[CPU0  ] | CR0=0x00000030 CR2=0x00000000
-00506950000i[CPU0  ] | CR3=0x00000000 CR4=0x00002000
-00506950000i[CPU0  ] 0x0000000000004ad2>> in al, 0x61 : E461
-00506950000i[CMOS  ] Last time is 1486176095 (Sat Feb  4 10:41:35 2017)
-00506950000i[XGUI  ] Exit
-00506950000i[      ] restoring default signal behavior
-00506950000i[SIM   ] quit_sim called with exit code 1
+01133850000p[XGUI  ] >>PANIC<< POWER button turned off.
+01133850000i[CPU0  ] CPU is in real mode (active, vmx guest)
+01133850000i[CPU0  ] CS.mode = 16 bit
+01133850000i[CPU0  ] SS.mode = 16 bit
+01133850000i[CPU0  ] EFER   = 0x00000000
+01133850000i[CPU0  ] | EAX=00020323  EBX=00000091  ECX=00000200  EDX=00000000
+01133850000i[CPU0  ] | ESP=0000fc38  EBP=0001fc5a  ESI=00001000  EDI=00000022
+01133850000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af pf cf
+01133850000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+01133850000i[CPU0  ] |  CS:f000( 0005| 0|  0) 000f0000 0000ffff 0 0
+01133850000i[CPU0  ] |  DS:0040( 0006| 0|  0) 00000400 0000ffff 0 0
+01133850000i[CPU0  ] |  SS:1d4e( 0006| 0|  0) 0001d4e0 0000ffff 0 0
+01133850000i[CPU0  ] |  ES:34d7( 0006| 0|  0) 00034d70 0000ffff 0 0
+01133850000i[CPU0  ] |  FS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+01133850000i[CPU0  ] |  GS:0000( 0000| 0|  0) 00000000 0000ffff 0 0
+01133850000i[CPU0  ] | EIP=00007f13 (00007f13)
+01133850000i[CPU0  ] | CR0=0x00000030 CR2=0x00000000
+01133850000i[CPU0  ] | CR3=0x00000000 CR4=0x00002000
+01133850000i[CPU0  ] 0x0000000000007f13>> mov al, byte ptr ds:0x003e : A03E00
+01133850000i[CMOS  ] Last time is 1486181050 (Sat Feb  4 12:04:10 2017)
+01133850000i[XGUI  ] Exit
+01133850000i[      ] restoring default signal behavior
+01133850000i[SIM   ] quit_sim called with exit code 1
